@@ -1,0 +1,17 @@
+#npm
+/node_modules
+package-lock.json
+yarn.lock
+*.log
+*.gz
+
+#environment configs
+.env
+.env.development
+
+#distribution files
+/dist
+
+#Security
+private.key
+public.key
