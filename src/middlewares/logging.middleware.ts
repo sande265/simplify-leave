@@ -3,6 +3,8 @@ import { getActualRequestDurationInMilliseconds } from "../shared";
 
 export const httpLogger = (req: Request, res: Response, next: NextFunction) => {
 
+    const start = process.hrtime();
+
     next();
 
     const cleanup = () => {
@@ -30,7 +32,6 @@ export const httpLogger = (req: Request, res: Response, next: NextFunction) => {
         let url = req.url;
         let requestedBy = req.socket?.remoteAddress;
         let status = res.statusCode;
-        const start = process.hrtime();
         const durationInMilliseconds = getActualRequestDurationInMilliseconds(start);
         let log = `${requestedBy?.replace(/^[^0-9]+/, "")} -> [${formatted_date}] %s${method}\x1b[0m: ${url} %s${status}\x1b[0m ${durationInMilliseconds.toLocaleString()} ms`;
         console.log(log, getColor(method), getColor(status));
