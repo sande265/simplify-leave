@@ -38,6 +38,16 @@ export const localValidation = (data: any, validationRule: any, error: any = {},
 
         const r = rule;
 
+        if (typeof rule === "object") {
+            let { param, values } = rule;
+            switch (param) {
+                case "in":
+                    return !values.includes(value) ? [capitalString(name) + " is invalid. avaiable options: " + values.join(", ")] : null;
+                default:
+                    return null;
+            }
+        }
+
         switch (rule) {
 
             case "required": {
@@ -88,6 +98,7 @@ export const localValidation = (data: any, validationRule: any, error: any = {},
             }
             case "in": {
                 let lists = r[1].split(",");
+                console.log("lists", r);
                 if (lists.includes(value)) {
                     return null
                 } else {

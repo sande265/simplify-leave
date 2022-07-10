@@ -1,6 +1,5 @@
 import { Leaves } from "../../Schemas/leaves.schema";
-import { User } from "../../Schemas/user.schema";
-import { queryParams } from "../User/userTypes";
+import { queryParams } from "../../types/queryTypes";
 
 export const insertLeave = async (payload: any, callback: Function) => {
     const leave = new Leaves<Document>(payload);
@@ -8,23 +7,23 @@ export const insertLeave = async (payload: any, callback: Function) => {
         Leaves<Document>.init();
         await leave.save();
         return callback(null, leave.toJSON());
-    } catch (error) {
+    } catch (error: any) {
         return callback(error);
     }
 }
 
 export const indexLeaves = ({ limit, page, sortBy, filter }: queryParams, callback: Function) => {
-    const skips = page * limit - limit
+    const skips: number = page * limit - limit
     try {
         Leaves.find(filter, {}, { limit: limit, sort: sortBy, skip: skips })
-        .populate("employee")
         .lean()
+        .populate("employee", "username email name contact")
         .exec((error: any, result: any) => {
                 if (error) callback(error);
                 else return callback(null, result);
             }
         );
-    } catch (error) {
+    } catch (error: any) {
         return callback(error);
     }
 }

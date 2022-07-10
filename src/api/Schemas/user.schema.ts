@@ -28,7 +28,7 @@ const UserSchema = new Schema({
         required: true,
         select: false
     }
-}, { timestamps: true, versionKey: false });
+}, { timestamps: true, versionKey: false, collection: "users" });
 
 UserSchema.methods.toJSON = function() {
     let data = this.toObject();

@@ -25,7 +25,7 @@ const LeaveSchema: Schema = new Schema({
         type: String,
         required: true
     }
-}, { timestamps: true, versionKey: false, toJSON: { virtuals: true } });
+}, { timestamps: true, versionKey: false, toJSON: { virtuals: true }, collection: "leaves" });
 
 LeaveSchema.virtual('employee', {
     ref: 'User',

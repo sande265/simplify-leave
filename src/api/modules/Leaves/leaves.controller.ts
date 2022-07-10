@@ -44,9 +44,10 @@ export const getLeaves = async (req: Request, res: Response) => {
     indexLeaves({ limit: limit, page: page }, (err: any, result: Array<[]>) => {
         if (err) res.status(500).json({
             message: "Somthing went wrong",
-            error: err
+            _diag: err,
+            error: true
         })
-        if (result.length <= 0) {
+        if (result?.length <= 0) {
             res.sendStatus(204);
         } else {
             res.json(paginate(result, limit, count, page));

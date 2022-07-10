@@ -1,10 +1,10 @@
-import { User } from "../../Schemas/user.schema";
+import { Plan } from "../../Schemas/plans.schema";
 import { queryParams } from "../../types/queryTypes";
 
-export const indexUsers = async ({ limit, page, sortBy, filter }: queryParams, callback: Function) => {
+export const index = ({ limit, page, sortBy, filter }: queryParams, callback: Function) => {
     const skips = page * limit - limit
     try {
-        User<Document>.find(filter, {}, { limit: limit, sort: sortBy, skip: skips }).lean().exec(
+        Plan<Document>.find(filter, {}, { limit: limit, sort: sortBy, skip: skips }).lean().exec(
             (error: any, result: any) => {
                 if (error) callback(error);
                 else return callback(null, result);
@@ -15,9 +15,9 @@ export const indexUsers = async ({ limit, page, sortBy, filter }: queryParams, c
     }
 }
 
-export const indexUser = (_id: string | number, callback: Function) => {
+export const indexOne = (_id: string | number, callback: Function) => {
     try {
-        User<Document>.findOne({ _id }, {}, {}).lean().exec(
+        Plan<Document>.findOne({ _id }, {}, {}).lean().exec(
             (error: any, result: any) => {
                 if (error) callback(error);
                 else return callback(null, result);
@@ -28,20 +28,20 @@ export const indexUser = (_id: string | number, callback: Function) => {
     }
 }
 
-export const insertUser = async (payload: any, callback: Function) => {
-    const user = new User<Document>(payload);
+export const insert = async (payload: any, callback: Function) => {
+    const plan = new Plan<Document>(payload);
     try {
-        User<Document>.init();
-        await user.save();
-        return callback(null, user.toJSON());
+        Plan<Document>.init();
+        await plan.save();
+        return callback(null, plan.toJSON());
     } catch (error) {
         return callback(error);
     }
 }
 
-export const modifyUser = (_id: string, payload: any, callback: Function) => {
+export const modify = (_id: string, payload: any, callback: Function) => {
     try {
-        User<Document>.findByIdAndUpdate({_id}, payload).lean().exec(
+        Plan<Document>.findOneAndUpdate({ _id }, payload).lean().exec(
             (err: any, result: any) => {
                 if (err) callback(err);
                 else callback(null, result);
@@ -52,9 +52,9 @@ export const modifyUser = (_id: string, payload: any, callback: Function) => {
     }
 }
 
-export const dropUsers = (callback: Function) => {
+export const drop = (callback: Function) => {
     try {
-        User<Document>.deleteMany({}, (err: any) => {
+        Plan<Document>.deleteMany({}, (err: any) => {
             if (err) {
                 callback(err)
             } else {

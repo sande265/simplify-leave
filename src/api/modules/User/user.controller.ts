@@ -49,22 +49,42 @@ export const createUser = (req: Request, res: Response) => {
 
 export const updateUser = (req: Request, res: Response) => {
     const { id } = req.params;
-    const body: object = req.body;
+    const body: any = req.body;
     const { email, name, role, contact }: any = body;
-    if (Object.keys(body).length > 0) {
-        modifyUser(id, { email, name, role, contact }, (err: any, result: any) => {
-            if (err) res.status(500).json({
-                message: "Something went wrong",
-                _diag: err
-            })
-            else res.json({
-                message: "User updated successfully.",
-                user: result
-            })
+    const rule: Object = {
+        name: ["required"],
+        email: ["required", "email"],
+        contact: ["string", "number"],
+        role: ["*"]
+    }
+    const { error, localvalidationerror } = localValidation(body, rule, {}, false);
+    if (localvalidationerror) {
+        res.status(422).json({
+            message: error
         })
     } else {
-        res.status(422).json({
-            message: "Please add field to update."
+        modifyUser(id, { email, name, role, contact }, (err: any, result: any) => {
+            if (err) {
+                if (err.code === 11000) {
+                    let key = err?.keyPattern && Object.keys(err?.keyPattern)[0]
+                    res.status(422).json({
+                        message: `User with the provided ${key} already exists`,
+                        _diag: err,
+                        error: true
+                    })
+                } else res.status(500).json({
+                    message: "Something went wrong",
+                    _diag: err,
+                    error: true
+                })
+            }
+            else {
+                delete result?.password;
+                res.json({
+                    message: "User created Updated.",
+                    user: result
+                })
+            }
         })
     }
 }
