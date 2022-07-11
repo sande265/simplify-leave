@@ -1,5 +1,13 @@
 import * as nodemailer from "nodemailer"
-import SMTPTransport from "nodemailer/lib/smtp-transport"
+import SMTPTransport from "nodemailer/lib/smtp-transport";
+require("dotenv").config();
+
+const mailParam: any = {
+    user: process.env.MAIL_USER,
+    password: process.env.MAIL_PASS,
+    port: process.env.MAIL_PORT,
+    host: process.env.MAIL_HOST
+}
 
 class MailTransporter {
 
@@ -20,12 +28,12 @@ interface mailTransport {
 
 export const createMailTransport: mailTransport = async (body, to, callback) => {
     const transport: nodemailer.Transporter<SMTPTransport.SentMessageInfo> = nodemailer.createTransport({
-        host: "mail.geniussystems.com.np",
-        port: 587,
+        host: mailParam.host,
+        port: mailParam.port,
         secure: false,
         auth: {
-            user: "sandesh.singh@geniussystems.com.np",
-            pass: 'Singh@9860'
+            user: mailParam.user,
+            pass: mailParam.password
         }
     })
 
