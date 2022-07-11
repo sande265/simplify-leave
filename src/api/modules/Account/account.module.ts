@@ -67,7 +67,7 @@ export const modify = async (_id: string, payload: any, callback: Function) => {
     try {
         let account = await Account<Document>.findOne({ _id });
         if (account) {
-            Account<Document>.findOneAndUpdate({ _id }, payload)
+            Account<Document>.findOneAndUpdate({ _id }, payload, { new: true })
                 .lean()
                 .exec((err: any, result: any) => {
                     if (err) callback(err);

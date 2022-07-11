@@ -27,6 +27,10 @@ const UserSchema = new Schema({
         type: String,
         required: true,
         select: false
+    },
+    configs: {
+        type: Schema.Types.ObjectId,
+        ref: "Config"
     }
 }, { timestamps: true, versionKey: false, collection: "users" });
 

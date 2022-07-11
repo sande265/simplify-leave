@@ -17,12 +17,13 @@ export const indexUsers = async ({ limit, page, sortBy, filter }: queryParams, c
 
 export const indexUser = (_id: string | number, callback: Function) => {
     try {
-        User<Document>.findOne({ _id }, {}, {}).lean().exec(
-            (error: any, result: any) => {
+        User<Document>.findOne({ _id }, {}, {})
+        .populate("configs", "_id self teams_users applications")
+        .lean()
+        .exec((error: any, result: any) => {
                 if (error) callback(error);
                 else return callback(null, result);
-            }
-        );
+            });
     } catch (error) {
         return callback(error);
     }
@@ -41,12 +42,12 @@ export const insertUser = async (payload: any, callback: Function) => {
 
 export const modifyUser = (_id: string, payload: any, callback: Function) => {
     try {
-        User<Document>.findByIdAndUpdate({_id}, payload).lean().exec(
-            (err: any, result: any) => {
+        User<Document>.findByIdAndUpdate({ _id }, payload, { new: true })
+            .lean()
+            .exec((err: any, result: any) => {
                 if (err) callback(err);
                 else callback(null, result);
-            }
-        )
+            })
     } catch (error) {
         return callback(error);
     }

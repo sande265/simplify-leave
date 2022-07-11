@@ -1,10 +1,10 @@
-import { Plan } from "../../Schemas/plans.schema";
+import { Config } from "../../Schemas/config.schema";
 import { queryParams } from "../../types/queryTypes";
 
 export const index = ({ limit, page, sortBy, filter }: queryParams, callback: Function) => {
     const skips = page * limit - limit
     try {
-        Plan<Document>.find(filter, {}, { limit: limit, sort: sortBy, skip: skips }).lean().exec(
+        Config<Document>.find(filter, {}, { limit: limit, sort: sortBy, skip: skips }).lean().exec(
             (error: any, result: any) => {
                 if (error) callback(error);
                 else return callback(null, result);
@@ -17,7 +17,9 @@ export const index = ({ limit, page, sortBy, filter }: queryParams, callback: Fu
 
 export const indexOne = (_id: string | number, callback: Function) => {
     try {
-        Plan<Document>.findOne({ _id }, {}, {}).lean().exec(
+        Config<Document>.findOne({ _id }, {}, {})
+        .lean()
+        .exec(
             (error: any, result: any) => {
                 if (error) callback(error);
                 else return callback(null, result);
@@ -29,11 +31,11 @@ export const indexOne = (_id: string | number, callback: Function) => {
 }
 
 export const insert = async (payload: any, callback: Function) => {
-    const plan = new Plan<Document>(payload);
+    const config = new Config<Document>(payload);
     try {
-        Plan<Document>.init();
-        await plan.save();
-        return callback(null, plan.toJSON());
+        Config<Document>.init();
+        await config.save();
+        return callback(null, config.toJSON());
     } catch (error) {
         return callback(error);
     }
@@ -41,7 +43,7 @@ export const insert = async (payload: any, callback: Function) => {
 
 export const modify = (_id: string, payload: any, callback: Function) => {
     try {
-        Plan<Document>.findOneAndUpdate({ _id }, payload, { new: true }).lean().exec(
+        Config<Document>.findOneAndUpdate({ _id }, payload, { new: true }).lean().exec(
             (err: any, result: any) => {
                 if (err) callback(err);
                 else callback(null, result);
@@ -54,7 +56,7 @@ export const modify = (_id: string, payload: any, callback: Function) => {
 
 export const drop = (callback: Function) => {
     try {
-        Plan<Document>.deleteMany({}, (err: any) => {
+        Config<Document>.deleteMany({}, (err: any) => {
             if (err) {
                 callback(err)
             } else {

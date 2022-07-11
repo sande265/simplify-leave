@@ -13,7 +13,8 @@ export const createUser = (req: Request, res: Response) => {
         email: ["required", "email"],
         password: ["password"],
         contact: ["string", "number"],
-        role: ["*"]
+        role: ["*"],
+        configs: ["string"]
     }
     const { error, localvalidationerror } = localValidation(body, rule, {}, false);
     if (localvalidationerror) {
@@ -50,12 +51,13 @@ export const createUser = (req: Request, res: Response) => {
 export const updateUser = (req: Request, res: Response) => {
     const { id } = req.params;
     const body: any = req.body;
-    const { email, name, role, contact }: any = body;
+    const { email, name, role, contact, configs }: any = body;
     const rule: Object = {
         name: ["required"],
         email: ["required", "email"],
         contact: ["string", "number"],
-        role: ["*"]
+        role: ["*"],
+        configs: ["string"]
     }
     const { error, localvalidationerror } = localValidation(body, rule, {}, false);
     if (localvalidationerror) {
@@ -63,7 +65,7 @@ export const updateUser = (req: Request, res: Response) => {
             message: error
         })
     } else {
-        modifyUser(id, { email, name, role, contact }, (err: any, result: any) => {
+        modifyUser(id, { email, name, role, contact, configs }, (err: any, result: any) => {
             if (err) {
                 if (err.code === 11000) {
                     let key = err?.keyPattern && Object.keys(err?.keyPattern)[0]
@@ -81,7 +83,7 @@ export const updateUser = (req: Request, res: Response) => {
             else {
                 delete result?.password;
                 res.json({
-                    message: "User created Updated.",
+                    message: "User updated successfully.",
                     user: result
                 })
             }
@@ -125,7 +127,7 @@ export const getUsers = async (req: Request, res: Response) => {
 
 export const getUser = (req: Request, res: Response) => {
     const { id } = req.params;
-    indexUser(id, (err: any, result: object) => {
+    indexUser(id, (err: any, result: { [key: string]: any }) => {
         if (err) res.status(500).json({
             message: "Somthing went wrong",
             error: err
@@ -133,10 +135,7 @@ export const getUser = (req: Request, res: Response) => {
         if (!result || Object.keys(result).length <= 0) {
             res.sendStatus(204);
         } else {
-            res.json({
-                data: result,
-                id: id
-            })
+            res.json(result);
         }
     })
 };

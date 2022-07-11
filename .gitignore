@@ -15,3 +15,7 @@ yarn.lock
 #Security
 private.key
 public.key
+
+#schemas
+*.schemas
+schema.*
