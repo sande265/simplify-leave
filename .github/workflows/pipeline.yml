@@ -9,7 +9,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     steps:
       - name: Clone repository
         uses: actions/checkout@v2
@@ -31,7 +31,7 @@ jobs:
           path: build
 
   build-dev:
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     if: contains('refs/heads/dev', github.ref)
     steps:
       - name: Clone repository
@@ -52,8 +52,8 @@ jobs:
         with:
           name: react-github-actions-build
           path: build
-
-deploy:
+  
+  deploy:
   runs-on: macos-latest
   # We specify that deploys needs to
   # finish before we create a release
