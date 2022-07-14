@@ -7,16 +7,21 @@ export const initateDB = () => {
         const pass: string | any = process.env.DB_PASS;
         const host: string | undefined = process.env.DB_HOST;
         const port: string | number | undefined = process.env.DB_PORT;
-        const url = `mongodb://${user}:${encodeURIComponent(pass)}@${host}:${port}`;
-        mongoose.connect(url, { 
-            useNewUrlParser: true, 
-            useUnifiedTopology: true, 
-            autoIndex: true,
-            dbName: "simplify-leave"
-        });
-        db.once("open", function () {
-            console.log("Connected successfully");
-        });
+        if (user && pass && host && port) {
+            const url = `mongodb://${user}:${encodeURIComponent(pass)}@${host}:${port}`;
+            mongoose.connect(url, {
+                useNewUrlParser: true,
+                useUnifiedTopology: true,
+                autoIndex: true,
+                dbName: "simplify-leave"
+            });
+            db.once("open", function () {
+                console.log("Connected successfully");
+            });
+        } else {
+            console.log("Failed No ENV", process.env);
+            
+        }
     } catch (error: any) {
         db.on("error", () => console.log("error connecting to DB"))
     }
