@@ -13,6 +13,8 @@ RUN npm install -g ts-node
 
 USER node
 
+RUN npm install
+
 COPY . .
 
 RUN npm run build
