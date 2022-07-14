@@ -33,7 +33,6 @@ jobs:
 
   build:
     runs-on: macos-latest
-    if: contains('refs/heads/main', github.ref)
     steps:
       - name: Clone repository
         uses: actions/checkout@v2
