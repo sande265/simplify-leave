@@ -32,7 +32,7 @@ RUN npm install
 
 COPY --from=builder /usr/app/dist ./build
 
-# COPY --chown=node:node .env .
+COPY --chown=node:node . .
 
 EXPOSE 8000
 
