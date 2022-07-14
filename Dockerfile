@@ -13,7 +13,7 @@ RUN npm install -g ts-node
 
 USER node
 
-COPY --chown=node:node . .
+# COPY --chown=node:node . .
 
 RUN npm run build
 
