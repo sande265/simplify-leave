@@ -5,7 +5,7 @@ RUN mkdir -p /usr/app/node_modules && chown -R node:node /usr/app
 
 WORKDIR /usr/app
 
-COPY package.json ./
+COPY package.json .
 # RUN npm config set unsafe-perm true
 
 RUN npm install -g typescript
@@ -13,7 +13,7 @@ RUN npm install -g ts-node
 
 USER node
 
-# COPY --chown=node:node . .
+COPY . .
 
 RUN npm run build
 
@@ -31,8 +31,6 @@ USER node
 RUN npm install
 
 COPY --from=builder /usr/app/dist ./build
-
-COPY --chown=node:node . .
 
 EXPOSE 8000
 
