@@ -7,7 +7,7 @@ yarn.lock
 
 #environment configs
 .env
-.env.development
+.env.**
 
 #distribution files
 /dist
